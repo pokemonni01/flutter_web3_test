@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:fluttert_web3_test/src/domain/network/add_network_use_case.dart';
+import 'package:fluttert_web3_test/src/domain/network/get_all_network_use_case.dart';
+import 'package:fluttert_web3_test/src/domain/network/network_model.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:http_interceptor/http/intercepted_client.dart';
@@ -8,6 +11,11 @@ import 'package:web3dart/credentials.dart';
 import 'package:web3dart/web3dart.dart';
 
 class HomeController extends GetxController {
+
+  HomeController(this._getAllNetworkUseCase, this._addNetworkUseCase);
+
+  final GetAllNetworkUseCase _getAllNetworkUseCase;
+  final AddNetworkUseCase _addNetworkUseCase;
 
   final _bscUrl = "https://bsc-dataseed.binance.org/";
   final _bscUrl2 = "https://bsc-dataseed1.binance.org:443";
@@ -25,7 +33,7 @@ class HomeController extends GetxController {
 
   @override
   void onReady() {
-    connect();
+    getAllNetwork();
     super.onReady();
   }
 
@@ -37,6 +45,19 @@ class HomeController extends GetxController {
     EtherAmount balance = await ethClient.getBalance(EthereumAddress.fromHex(_whaleAddress));
     int networkId = await ethClient.getNetworkId();
     printUiLog("Balance: " + balance.getValueInUnit(EtherUnit.ether).toString());
+  }
+
+  void getAllNetwork() async {
+    printUiLog("Network List: ${await _getAllNetworkUseCase.invoke()}");
+  }
+
+  void addNetwork() async {
+    await _addNetworkUseCase.invoke(NetworkModel(
+      id: "NT001",
+      name: "THB Mainnet",
+      rpcUrl: "www.google.com",
+      symbol: "THB",
+    ));
   }
 
   void connectMetaMask() async {

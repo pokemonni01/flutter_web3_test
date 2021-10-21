@@ -8,7 +8,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    HomeController controller = Get.put(HomeController());
+    HomeController controller = Get.find();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -22,14 +22,19 @@ class HomePage extends StatelessWidget {
               children: [
                 InkWell(
                   onTap: () => {controller.connectMetaMask()},
-                  child: Container(color: Colors.green, child: Text("Connect MetaMask")),
+                  child: Container(
+                      width: 70,
+                      height: 50,
+                      color: Colors.green,
+                      child: Text("Connect MetaMask")),
                 ),
                 SizedBox(
                   height: 16.0,
                 ),
                 InkWell(
-                  onTap: () => {controller.connect()},
-                  child: Container(color: Colors.green, child: Text("Connect Manual")),
+                  onTap: () => {controller.getAllNetwork()},
+                  child: Container(
+                      color: Colors.green, child: Text("Connect Manual")),
                 ),
                 SizedBox(
                   height: 16.0,
@@ -39,15 +44,15 @@ class HomePage extends StatelessWidget {
                   child: Container(color: Colors.red, child: Text("Clear Log")),
                 ),
                 Obx(() => Expanded(
-                  child: ListView.builder(
-                    itemCount: controller.logList.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(controller.logList[index]),
-                      );
-                    },
-                  ),
-                ))
+                      child: ListView.builder(
+                        itemCount: controller.logList.length,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            title: Text(controller.logList[index]),
+                          );
+                        },
+                      ),
+                    ))
               ],
             ),
           ),

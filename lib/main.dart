@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttert_web3_test/src/core/database/database_manager.dart';
 import 'package:fluttert_web3_test/src/presentation/home_page.dart';
 import 'package:get/get.dart';
 
@@ -6,6 +7,8 @@ import 'src/core/locator.dart';
 
 void main() {
   setupLocator();
+  DatabaseManager databaseManager = Get.find();
+  databaseManager.initialDatabase();
   runApp(const MyApp());
 }
 
