@@ -1,13 +1,10 @@
 import 'dart:convert';
-import 'dart:html';
 import 'dart:typed_data';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:http_interceptor/http/intercepted_client.dart';
-import 'package:web3dart/crypto.dart';
-import 'package:web3dart/src/browser/dart_wrappers.dart';
-import 'package:web3dart/src/browser/javascript.dart';
+import 'package:web3dart/credentials.dart';
 import 'package:web3dart/web3dart.dart';
 
 class HomeController extends GetxController {
@@ -33,34 +30,33 @@ class HomeController extends GetxController {
   }
 
   void connect() async {
-    Credentials credentials = EthPrivateKey.fromHex(_myAddress);
+    Credentials credentials = EthPrivateKey.fromHex(_pSAddress);
     var address = await credentials.extractAddress();
     Client httpClient = Get.find<InterceptedClient>();
-    var ethClient = Web3Client(_bscUrl, httpClient);
-    EtherAmount balance = await ethClient.getBalance(address);
+    var ethClient = Web3Client(_ethMainNet, httpClient);
+    EtherAmount balance = await ethClient.getBalance(EthereumAddress.fromHex(_whaleAddress));
     int networkId = await ethClient.getNetworkId();
-    printUiLog("Balance: " + balance.toString());
-    printUiLog("Network Id: " + networkId.toString());
+    printUiLog("Balance: " + balance.getValueInUnit(EtherUnit.ether).toString());
   }
 
   void connectMetaMask() async {
-    final eth = window.ethereum;
-    if (eth == null) {
-      printUiLog('MetaMask is not available');
-     return;
-    }
-
-    final client = Web3Client.custom(eth.asRpcService());
-    final credentials = await eth.requestAccount();
-
-    printUiLog('Using ${credentials.address}');
-    printUiLog('coinbaseAddress: ${await client.coinbaseAddress()}');
-    printUiLog('getNetworkId: ${await client.getNetworkId()}');
-    printUiLog('Client is listening: ${await client.isListeningForNetwork()}');
-
-    final message = Uint8List.fromList(utf8.encode('Hello from web3dart'));
-    final signature = await credentials.signPersonalMessage(message);
-    printUiLog('Signature: ${base64.encode(signature)}');
+    // final eth = window.ethereum;
+    // if (eth == null) {
+    //   printUiLog('MetaMask is not available');
+    //  return;
+    // }
+    //
+    // final client = Web3Client.custom(eth.asRpcService());
+    // final credentials = await eth.requestAccount();
+    //
+    // printUiLog('Using ${credentials.address}');
+    // printUiLog('coinbaseAddress: ${await client.coinbaseAddress()}');
+    // printUiLog('getNetworkId: ${await client.getNetworkId()}');
+    // printUiLog('Client is listening: ${await client.isListeningForNetwork()}');
+    //
+    // final message = Uint8List.fromList(utf8.encode('Hello from web3dart'));
+    // final signature = await credentials.signPersonalMessage(message);
+    // printUiLog('Signature: ${base64.encode(signature)}');
   }
 
   void clearLog() {
