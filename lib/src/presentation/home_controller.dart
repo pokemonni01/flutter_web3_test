@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:http_interceptor/http/intercepted_client.dart';
+import 'package:web3dart/credentials.dart';
 import 'package:web3dart/web3dart.dart';
 
 class HomeController extends GetxController {
@@ -29,14 +30,13 @@ class HomeController extends GetxController {
   }
 
   void connect() async {
-    Credentials credentials = EthPrivateKey.fromHex(_myAddress);
+    Credentials credentials = EthPrivateKey.fromHex(_pSAddress);
     var address = await credentials.extractAddress();
     Client httpClient = Get.find<InterceptedClient>();
-    var ethClient = Web3Client(_bscUrl, httpClient);
-    EtherAmount balance = await ethClient.getBalance(address);
+    var ethClient = Web3Client(_ethMainNet, httpClient);
+    EtherAmount balance = await ethClient.getBalance(EthereumAddress.fromHex(_whaleAddress));
     int networkId = await ethClient.getNetworkId();
-    printUiLog("Balance: " + balance.toString());
-    printUiLog("Network Id: " + networkId.toString());
+    printUiLog("Balance: " + balance.getValueInUnit(EtherUnit.ether).toString());
   }
 
   void connectMetaMask() async {
