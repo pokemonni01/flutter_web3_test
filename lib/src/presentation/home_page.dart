@@ -9,9 +9,13 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     HomeController controller = Get.put(HomeController());
-    return SafeArea(
-      child: Scaffold(
-        body: Padding(
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text("Web3 Test"),
+      ),
+      body: SafeArea(
+        child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Center(
             child: Column(
