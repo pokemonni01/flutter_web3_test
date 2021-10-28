@@ -7,6 +7,7 @@ import 'package:fluttert_web3_test/src/domain/network/network_model.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:http_interceptor/http/intercepted_client.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:web3dart/credentials.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -31,10 +32,8 @@ class HomeController extends GetxController {
 
   List<String> logList = RxList.empty(growable: true);
 
-  @override
-  void onReady() {
-    getAllNetwork();
-    super.onReady();
+  void requestPermission() async {
+    var status = await Permission.storage.request();
   }
 
   void connect() async {
@@ -48,10 +47,16 @@ class HomeController extends GetxController {
   }
 
   void getAllNetwork() async {
+    await [
+      Permission.storage,
+    ].request();
     printUiLog("Network List: ${await _getAllNetworkUseCase.invoke()}");
   }
 
   void addNetwork() async {
+    await [
+      Permission.storage,
+    ].request();
     await _addNetworkUseCase.invoke(NetworkModel(
       id: "NT001",
       name: "THB Mainnet",

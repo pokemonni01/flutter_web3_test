@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 import 'src/core/locator.dart';
 
-void main() {
+Future<void> main() async {
   setupLocator();
   DatabaseManager databaseManager = Get.find();
   databaseManager.initialDatabase();

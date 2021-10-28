@@ -22,12 +22,13 @@ class DatabaseManagerImpl extends DatabaseManager {
   @override
   void initialDatabase() async {
     WidgetsFlutterBinding.ensureInitialized();
-    getDatabase
     _database = openDatabase(
       _databaseFileName,
       onCreate: (db, version) {
-        return db.execute(
-          DatabaseSql.createNetworkTable +
+        db.execute(
+          DatabaseSql.createNetworkTable,
+        );
+        db.rawInsert(
           DatabaseSql.insertEthMainNetToNetworkTable,
         );
       },
