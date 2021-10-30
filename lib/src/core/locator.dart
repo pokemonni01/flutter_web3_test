@@ -4,7 +4,7 @@ import 'package:fluttert_web3_test/src/data/network/local/network_database.dart'
 import 'package:fluttert_web3_test/src/data/network/network_repository.dart';
 import 'package:fluttert_web3_test/src/domain/network/add_network_use_case.dart';
 import 'package:fluttert_web3_test/src/domain/network/get_all_network_use_case.dart';
-import 'package:fluttert_web3_test/src/presentation/home_controller.dart';
+import 'package:fluttert_web3_test/src/presentation/home/home_controller.dart';
 import 'package:get/get.dart';
 import 'package:http_interceptor/http/intercepted_client.dart';
 

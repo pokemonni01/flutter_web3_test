@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:fluttert_web3_test/src/presentation/home_controller.dart';
+import 'package:fluttert_web3_test/src/presentation/home/home_controller.dart';
 import 'package:get/get.dart';
 
 class HomePage extends StatefulWidget {
@@ -42,9 +42,8 @@ class _HomePageState extends State<HomePage> {
   _selectNetworkButton() {
     return Material(
       child: InkWell(
-        onTap: () async => {
-          _showSelectNetworkDialog(await _controller.getNetworkList())
-        },
+        onTap: () async =>
+            {_showSelectNetworkDialog(await _controller.getNetworkList())},
         child: Container(
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey),
@@ -56,9 +55,13 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                const SizedBox(width: 8,),
+                const SizedBox(
+                  width: 8,
+                ),
                 Obx(() => Text(_controller.selectedNetworkName.value)),
-                const SizedBox(width: 8,),
+                const SizedBox(
+                  width: 8,
+                ),
                 const Icon(Icons.keyboard_arrow_down)
               ],
             ),
@@ -87,17 +90,48 @@ class _HomePageState extends State<HomePage> {
         shrinkWrap: true,
         itemCount: items.length,
         itemBuilder: (context, index) {
-          return optionOne(context, items[index]);
+          return items.last == items[index]
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _networkItem(context, items[index]),
+                    _addNewNetwork(context)
+                  ],
+                )
+              : _networkItem(context, items[index]);
         },
       ),
     );
   }
 
-  Widget optionOne(BuildContext context, String text) {
+  Widget _networkItem(BuildContext context, String text) {
     return SimpleDialogOption(
-      child: Text(text),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Icon(null),
+          const SizedBox(width: 8.0,),
+          Text(text),
+        ],
+      ),
       onPressed: () {
         _controller.setSelectedNetwork(text);
+        Navigator.pop(context);
+      },
+    );
+  }
+
+  Widget _addNewNetwork(BuildContext context) {
+    return SimpleDialogOption(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: const [
+          Icon(Icons.add),
+          SizedBox(width: 8.0,),
+          Text("Add New Network"),
+        ],
+      ),
+      onPressed: () {
         Navigator.pop(context);
       },
     );
