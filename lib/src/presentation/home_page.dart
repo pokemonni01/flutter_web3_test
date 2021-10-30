@@ -11,7 +11,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   final HomeController _controller = Get.find();
 
   @override
@@ -29,48 +28,78 @@ class _HomePageState extends State<HomePage> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(16.0),
           child: Center(
             child: Column(
+              children: [_selectNetworkButton()],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  _selectNetworkButton() {
+    return Material(
+      child: InkWell(
+        onTap: () async => {
+          _showSelectNetworkDialog(await _controller.getNetworkList())
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey),
+            borderRadius: BorderRadius.circular(100),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                InkWell(
-                  onTap: () => {_controller.addNetwork()},
-                  child: Container(
-                      width: 70,
-                      height: 50,
-                      color: Colors.green,
-                      child: Text("Connect MetaMask")),
-                ),
-                SizedBox(
-                  height: 16.0,
-                ),
-                InkWell(
-                  onTap: () => {_controller.getAllNetwork()},
-                  child: Container(
-                      color: Colors.green, child: Text("Connect Manual")),
-                ),
-                SizedBox(
-                  height: 16.0,
-                ),
-                InkWell(
-                  onTap: () => {_controller.clearLog()},
-                  child: Container(color: Colors.red, child: Text("Clear Log")),
-                ),
-                Obx(() => Expanded(
-                  child: ListView.builder(
-                    itemCount: _controller.logList.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(_controller.logList[index]),
-                      );
-                    },
-                  ),
-                ))
+                const SizedBox(width: 8,),
+                Obx(() => Text(_controller.selectedNetworkName.value)),
+                const SizedBox(width: 8,),
+                const Icon(Icons.keyboard_arrow_down)
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _showSelectNetworkDialog(List<String> networkList) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Networks'),
+          content: _networkList(networkList),
+        );
+      },
+    );
+  }
+
+  Widget _networkList(List<String> items) {
+    return SizedBox(
+      width: 300,
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          return optionOne(context, items[index]);
+        },
+      ),
+    );
+  }
+
+  Widget optionOne(BuildContext context, String text) {
+    return SimpleDialogOption(
+      child: Text(text),
+      onPressed: () {
+        _controller.setSelectedNetwork(text);
+        Navigator.pop(context);
+      },
     );
   }
 }

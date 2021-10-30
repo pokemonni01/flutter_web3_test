@@ -32,6 +32,8 @@ class HomeController extends GetxController {
 
   List<String> logList = RxList.empty(growable: true);
 
+  RxString selectedNetworkName = "Smart Chain".obs;
+
   void requestPermission() async {
     var status = await Permission.storage.request();
   }
@@ -43,14 +45,14 @@ class HomeController extends GetxController {
     var ethClient = Web3Client(_ethMainNet, httpClient);
     EtherAmount balance = await ethClient.getBalance(EthereumAddress.fromHex(_whaleAddress));
     int networkId = await ethClient.getNetworkId();
-    printUiLog("Balance: " + balance.getValueInUnit(EtherUnit.ether).toString());
+    print("Balance: " + balance.getValueInUnit(EtherUnit.ether).toString());
   }
 
   void getAllNetwork() async {
     await [
       Permission.storage,
     ].request();
-    printUiLog("Network List: ${await _getAllNetworkUseCase.invoke()}");
+    print("Network List: ${await _getAllNetworkUseCase.invoke()}");
   }
 
   void addNetwork() async {
@@ -65,32 +67,12 @@ class HomeController extends GetxController {
     ));
   }
 
-  void connectMetaMask() async {
-    // final eth = window.ethereum;
-    // if (eth == null) {
-    //   printUiLog('MetaMask is not available');
-    //  return;
-    // }
-    //
-    // final client = Web3Client.custom(eth.asRpcService());
-    // final credentials = await eth.requestAccount();
-    //
-    // printUiLog('Using ${credentials.address}');
-    // printUiLog('coinbaseAddress: ${await client.coinbaseAddress()}');
-    // printUiLog('getNetworkId: ${await client.getNetworkId()}');
-    // printUiLog('Client is listening: ${await client.isListeningForNetwork()}');
-    //
-    // final message = Uint8List.fromList(utf8.encode('Hello from web3dart'));
-    // final signature = await credentials.signPersonalMessage(message);
-    // printUiLog('Signature: ${base64.encode(signature)}');
+
+  Future<List<String>> getNetworkList() async {
+    return ["Smart Chain", "ETH Mainnet"];
   }
 
-  void clearLog() {
-    logList.clear();
-  }
-
-  void printUiLog(Object? object) {
-    logList.add(object?.toString() ?? "");
-    print(object);
+  void setSelectedNetwork(String selectedNetworkName) {
+    this.selectedNetworkName.value = selectedNetworkName;
   }
 }
